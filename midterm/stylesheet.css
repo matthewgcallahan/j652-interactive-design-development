@@ -1,0 +1,56 @@
+#byline {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+h1 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 52px;
+}
+
+h2 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 30px;
+}
+
+h3 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+p {
+  font-family: georgia, "times new roman", serif;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.caption {
+  font-family: georgia, "times new roman", serif;
+  font-size: 14px;
+}
+
+.banner {
+  width: 100%;
+}
+
+#content {
+  max-width: 700px;
+  margin: 35px auto;
+}
+
+img {
+  width: 100%;
+  margin: 20px 0 5px;
+}
+
+blockquote {
+  font-size: 30px;
+  line-height: 40px;
+  font-family: helvetica, arial, sans-serif;
+  color: #999;
+  border-left: 12px solid #999;
+  padding-left: 24px;
+  margin-left: 0;
+}
