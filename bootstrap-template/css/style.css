@@ -1,0 +1,17 @@
+.container, .container-fluid {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.headline-element {
+  text-align: center;
+}
+
+
+.footer {
+  margin-bottom: 0;
+  padding: 20px;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
