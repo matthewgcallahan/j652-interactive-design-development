@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My map</title>
+<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="map.css">
+<style>
+.county {
+	stroke: #fff;
+	stroke-width: 0.5;
+}
+
+.hidden {
+		display: none;
+}
+div.tooltip {
+		color: #222;
+		background-color: #fff;
+		padding: .5em;
+		text-shadow: #f5f5f5 0 1px 0;
+		border-radius: 2px;
+		opacity: 0.9;
+		position: absolute;
+}
+</style>
+</head>
+<body>
+  <div id="container" class="svg-container"></div>
+	<script type="text/javascript">
+
+    var w = 600;
+    var h = 400;
+
+    var svg = d3.select("div#container")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+    var projection = d3.geoMercator()
+                       .translate([w/2, h/2])
+                       .scale(7000)
+                       .center([-77.4,38.8]);
+
+    var path = d3.geoPath()
+                 .projection(projection);
+
+     var counties = d3.map();
+
+     var colorScale = d3.scaleThreshold()
+                    .domain([100000, 200000, 300000, 400000, 500000, 600000])
+                    .range(d3.schemeBlues[6]);
+
+  // load data
+var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-counties.geojson");
+var mapData = d3.csv("./Choose_Maryland___Compare_Counties_-_Quality_Of_Life.csv", function(d) {
+    counties.set(d.County.replace(' County',''), d['Average Sale Price of a Home ($ Dollars)'])
+});
+
+
+var tooltip = d3.select('#container').append('div')
+                .attr('class', 'hidden tooltip');
+
+Promise.all([maryland, mapData]).then(function(values){
+    // draw map
+    svg.selectAll("path")
+        .data(values[0].features)
+        .enter()
+        .append("path")
+        .attr("class","county")
+        .attr("d", path)
+        .attr("fill", d => {
+          return colorScale(counties.get(d.properties.name));
+        })
+        .on('mousemove', d => {
+            var mouse = d3.mouse(svg.node()).map( d => parseInt(d) );
+            tooltip.classed('hidden', false)
+              .attr('style', `left:${mouse[0] + 15}px; top: ${mouse[1] - 35}px;`)
+              .html(`
+                ${d.properties.name}: $${counties.get(d.properties.name)}
+                `
+              );
+        })
+        .on('mouseout', () => {
+            tooltip.classed('hidden', true);
+        });
+  });
+
+</script>
+</body>
+</html>
