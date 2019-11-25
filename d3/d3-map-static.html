@@ -5,7 +5,6 @@
 <title>Map</title>
 <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="map.css">
 <style>
 .county {
 	stroke: #fff;
@@ -51,18 +50,22 @@ div.tooltip {
                        .center([-77.4,38.8]);
 
 		// Creates a new path generator with the appropriate projection
-    var path = d3.geoPath()
+    var geoPathGenerator = d3.geoPath()
                  .projection(projection);
 
 		// Creating an iterable variable with key-value pairs.
      var counties = d3.map();
 
-			  // Load data
-				// Maryland is data that
+		  // Load data
+			// Maryland GeoJSON data. This data defines the shape of the counties
 			var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-counties.geojson");
+			// This data, however, defines congressional districts
+			// var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-congressional-districts.geojson");
+			// And this data defines zip Choose_Maryland___Compare_Counties_
+			// var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-zips.geojson");
 
 			// Wait until all the files have floaded, then begin working through everything;
-			Promise.all([maryland, mapData]).then(function(values){
+			Promise.all([maryland]).then(function(values){
 					// Grab the SVG and begin adding "path" elements.
 
 			    svg.selectAll("path")
@@ -70,7 +73,7 @@ div.tooltip {
 			        .enter()
 			        .append("path")
 			        .attr("class","county")
-			        .attr("d", path)
+			        .attr("d", geoPathGenerator)
 
 			  });
 

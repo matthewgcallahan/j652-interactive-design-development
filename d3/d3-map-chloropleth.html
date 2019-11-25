@@ -50,11 +50,11 @@ div.tooltip {
                        .center([-77.4,38.8]);
 
 		// Creates a new path generator with the appropriate projection
-    var path = d3.geoPath()
+    var geoPathGenerator = d3.geoPath()
                  .projection(projection);
 
 		// Creating an iterable variable with key-value pairs.
-     var counties = d3.map();
+     var countyHousingCost = d3.map();
 
 		// Creaing our color scheme and the stops.
      var colorScale = d3.scaleThreshold()
@@ -63,9 +63,15 @@ div.tooltip {
 
 			  // Load data
 				// Maryland is data that
-			var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-counties.geojson");
-			var mapData = d3.csv("https://raw.githubusercontent.com/matthewgcallahan/j652-interactive-design-development/master/d3/Choose_Maryland___Compare_Counties_-_Quality_Of_Life.csv", function(d) {
-			    counties.set(d.County.replace(' County',''), d['Average Sale Price of a Home ($ Dollars)'])
+				// Load data
+				// Maryland GeoJSON data. This data defines the shape of the counties
+				var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-counties.geojson");
+				// This data, however, defines congressional districts
+				// var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-congressional-districts.geojson");
+				// And this data defines zip Choose_Maryland___Compare_Counties_
+				// var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-zips.geojson");
+			var countyHousingCostData = d3.csv("https://raw.githubusercontent.com/matthewgcallahan/j652-interactive-design-development/master/d3/Choose_Maryland___Compare_Counties_-_Quality_Of_Life.csv", function(d) {
+			    countyHousingCost.set(d.County.replace(' County',''), d['Average Sale Price of a Home ($ Dollars)'])
 			});
 
 			// Creating a tool tip. This is the same as if we had created it in html
@@ -73,7 +79,7 @@ div.tooltip {
 			                .attr('class', 'hidden tooltip');
 
 			// Wait until all the files have floaded, then begin working through everything;
-			Promise.all([maryland, mapData]).then(function(values){
+			Promise.all([maryland, countyHousingCostData]).then(function(values){
 					// Grab the SVG and begin adding "path" elements.
 
 			    svg.selectAll("path")
@@ -81,10 +87,10 @@ div.tooltip {
 			        .enter()
 			        .append("path")
 			        .attr("class","county")
-			        .attr("d", path)
+			        .attr("d", geoPathGenerator)
 			        .attr("fill", d => {
 								// The color will return the shade based on the number its fed.
-			          return colorScale(counties.get(d.properties.name));
+			          return colorScale(countyHousingCost.get(d.properties.name));
 			        })
 			  });
 
