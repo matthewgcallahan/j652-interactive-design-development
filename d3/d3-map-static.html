@@ -57,7 +57,10 @@ div.tooltip {
      var counties = d3.map();
 
 		  // Load data
-			// Maryland GeoJSON data. This data defines the shape of the counties
+			// Maryland GeoJSON data. This data defines the shape of the counties.
+			// GeoJSON is a collection of latitude and longitude coordinates.
+			// We use our projection defined above to "project" these data points
+			// on a flat screen.
 			var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-counties.geojson");
 			// This data, however, defines congressional districts
 			// var maryland = d3.json("https://raw.githubusercontent.com/frankrowe/maryland-geojson/master/maryland-congressional-districts.geojson");
